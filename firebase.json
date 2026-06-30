@@ -12,6 +12,7 @@
     "source": "functions"
   },
   "hosting": {
+    "site": "mycinetoolbox",
     "public": "dist",
     "ignore": [
       "firebase.json",
