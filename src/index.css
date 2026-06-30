@@ -1,0 +1,314 @@
+@import "tailwindcss";
+
+/* =============================================
+   MY CINE TOOLBOX — Design System (V4)
+   ============================================= */
+
+@theme {
+  /* Brand Colors */
+  --color-primary: #4adada;
+  --color-primary-container: #00b8b8;
+  --color-secondary: #ffb68b;
+  --color-secondary-container: #e07221;
+  --color-background: #0f1415;
+  
+  /* Surface Scale (Cinematic slate/teal undertones) */
+  --color-surface: #0f1415;
+  --color-surface-dim: #0f1415;
+  --color-surface-container-lowest: #090f10;
+  --color-surface-container-low: #171d1d;
+  --color-surface-container: #1b2121;
+  --color-surface-container-high: #252b2b;
+  --color-surface-container-highest: #303636;
+  --color-surface-variant: #303636;
+  --color-surface-bright: #343a3a;
+
+  /* On-Surface Text */
+  --color-on-surface: #dee4e3;
+  --color-on-surface-variant: #bbc9c9;
+  --color-on-background: #dee4e3;
+  --color-on-primary: #003737;
+
+  /* Outline */
+  --color-outline: #859393;
+  --color-outline-variant: #3c4949;
+
+  /* Error */
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+
+  /* Typography */
+  --font-display: "Bebas Neue", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Sharp machined metal corners - no rounded borders except full circle avatar */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-full: 9999px;
+}
+
+/* =============================================
+   Base Styles
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  border-radius: 0px !important; /* Enforce sharp corners globally */
+}
+
+/* Allow avatars, indicators, and buttons to use border-radius if they explicitly declare it */
+.rounded-full, .rounded-full * {
+  border-radius: 9999px !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* =============================================
+   My Cine Toolbox Ambient Effects
+   ============================================= */
+
+/* Film Grain Overlay */
+.film-grain {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.05;
+  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+}
+
+/* Laser Etched Teal Gradient Divider */
+.teal-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent 0%, #4adada 50%, transparent 100%);
+}
+
+/* Backlit Teal Glow on Hover */
+.hover-glow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px 2px rgba(0, 184, 184, 0.15);
+  border-color: #4adada !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f1415;
+}
+::-webkit-scrollbar-thumb {
+  background: #4adada;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00b8b8;
+}
+
+/* Text Selection */
+::selection {
+  background-color: rgba(74, 218, 218, 0.2);
+  color: #4adada;
+}
+
+/* =============================================
+   Blog Prose — .prose-cine
+   ============================================= */
+
+.prose-cine {
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  max-width: 72ch;
+}
+
+.prose-cine h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: var(--color-on-surface);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+.prose-cine h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.prose-cine p {
+  margin-bottom: 1.25rem;
+  color: var(--color-on-surface-variant);
+}
+
+.prose-cine strong {
+  color: var(--color-on-surface);
+  font-weight: 700;
+}
+
+.prose-cine em {
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.prose-cine blockquote {
+  border-left: 3px solid var(--color-primary);
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  background: rgba(74, 218, 218, 0.05);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-on-surface);
+  letter-spacing: 0.01em;
+}
+
+.prose-cine ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 1.75rem;
+}
+
+.prose-cine ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.6rem;
+  color: var(--color-on-surface-variant);
+}
+
+.prose-cine ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  top: 0.25rem;
+}
+
+.prose-cine ol {
+  padding-left: 1.5rem;
+  margin: 1.25rem 0 1.75rem;
+}
+
+.prose-cine ol li {
+  margin-bottom: 0.6rem;
+  color: var(--color-on-surface-variant);
+  padding-left: 0.5rem;
+}
+
+.prose-cine a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-cine a:hover {
+  color: var(--color-primary-container);
+}
+
+.prose-cine hr {
+  border: none;
+  border-top: 1px solid var(--color-outline-variant);
+  margin: 2.5rem 0;
+}
+
+/* =============================================
+   Grammarly Opt-Out & Extension Overrides
+   ============================================= */
+grammarly-extension,
+grammarly-card,
+[contenteditable] ~ grammarly-extension, 
+input ~ grammarly-extension, 
+textarea ~ grammarly-extension { 
+  display: none !important; 
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* =============================================
+   Blog Image Wireframe & Callout Styles
+   ============================================= */
+.imgbox {
+  margin: 32px 0;
+  border: 2px dashed #4fa3c4;
+  background: repeating-linear-gradient(45deg, #15222a, #15222a 10px, #182832 10px, #182832 20px);
+  padding: 26px 22px;
+  text-align: center;
+}
+.imgbox.sample {
+  border-color: #c9622f;
+  background: repeating-linear-gradient(45deg, #241a14, #241a14 10px, #2a1d15 10px, #2a1d15 20px);
+}
+.imgbox.group {
+  border-color: #7d8f4d;
+  background: repeating-linear-gradient(45deg, #1c2016, #1c2016 10px, #20251a 10px, #20251a 20px);
+}
+.imgbox .label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.imgbox.sample .label {
+  color: #e08a52;
+}
+.imgbox.group .label {
+  color: #a8bd6f;
+}
+.imgbox:not(.sample):not(.group) .label {
+  color: #7cc3e0;
+}
+.imgbox .note {
+  font-size: 13px;
+  color: var(--color-on-surface-variant);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+.imgbox .dims {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #666;
+  margin-top: 8px;
+  letter-spacing: 0.04em;
+}
+.note-callout {
+  margin-top: 60px;
+  padding: 20px 24px;
+  border-left: 3px solid #ffb68b;
+  background: #171d1d;
+  font-size: 13.5px;
+  color: var(--color-on-surface-variant);
+  line-height: 1.6;
+}
+.note-callout strong {
+  color: var(--color-on-surface);
+}
+

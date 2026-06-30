@@ -1,0 +1,5 @@
+{
+  "name": "ChromaKey Pro: VFX Unmixing Lab",
+  "description": "A high-fidelity chroma keying and color unmixing tool for professional VFX compositing, featuring mathematical alpha extraction and spill suppression.",
+  "requestFramePermissions": []
+}
