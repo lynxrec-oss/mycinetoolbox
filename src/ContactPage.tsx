@@ -101,11 +101,11 @@ export default function ContactPage() {
       <SiteNav />
 
       {/* ── HERO ── */}
-      <section className="relative w-full md:h-[70vh] flex flex-col md:justify-end overflow-hidden bg-background">
+      <section className="relative w-full pt-[72px] md:pt-0 md:h-[70vh] flex flex-col md:justify-end overflow-hidden bg-background">
         {/* Desktop-only Background Image */}
         <div className="hidden md:block absolute inset-0 z-0">
           <img
-            src="/contact-hero.png?v=2"
+            src="/contact-hero.png?v=4"
             alt="Aaron Stowers on location in Detroit"
             className="w-full h-full object-cover object-top"
           />
@@ -116,7 +116,7 @@ export default function ContactPage() {
         {/* Mobile-only Top Banner Image */}
         <div className="block md:hidden w-full aspect-video relative z-0">
           <img
-            src="/contact-hero.png?v=2"
+            src="/contact-hero.png?v=4"
             alt="Aaron Stowers on location in Detroit"
             className="w-full h-full object-cover object-top"
           />
