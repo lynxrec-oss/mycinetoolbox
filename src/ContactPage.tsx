@@ -101,15 +101,15 @@ export default function ContactPage() {
       <SiteNav />
 
       {/* ── HERO ── */}
-      <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
+      <section className="relative w-full aspect-video md:h-[70vh] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/contact-hero.png?v=2"
             alt="Aaron Stowers on location in Detroit"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-top"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f1415] via-[#0f1415]/50 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0f1415]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f1415] via-[#0f1415]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0f1415]/50 to-transparent" />
         </div>
         <div className="relative z-10 px-6 md:px-16 pb-14 max-w-7xl mx-auto w-full">
           <p className="font-mono text-label-sm text-primary tracking-[0.3em] uppercase mb-3">
