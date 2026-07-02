@@ -101,8 +101,9 @@ export default function ContactPage() {
       <SiteNav />
 
       {/* ── HERO ── */}
-      <section className="relative w-full aspect-video md:h-[70vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0 z-0">
+      <section className="relative w-full md:h-[70vh] flex flex-col md:justify-end overflow-hidden bg-background">
+        {/* Desktop-only Background Image */}
+        <div className="hidden md:block absolute inset-0 z-0">
           <img
             src="/contact-hero.png?v=2"
             alt="Aaron Stowers on location in Detroit"
@@ -111,11 +112,23 @@ export default function ContactPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f1415] via-[#0f1415]/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0f1415]/50 to-transparent" />
         </div>
-        <div className="relative z-10 px-6 md:px-16 pb-14 max-w-7xl mx-auto w-full">
+
+        {/* Mobile-only Top Banner Image */}
+        <div className="block md:hidden w-full aspect-video relative z-0">
+          <img
+            src="/contact-hero.png?v=2"
+            alt="Aaron Stowers on location in Detroit"
+            className="w-full h-full object-cover object-top"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f1415] to-transparent" />
+        </div>
+
+        {/* Hero Content — Absolute on desktop, relative stacked on mobile */}
+        <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 px-6 md:px-16 pt-8 pb-10 md:pb-14 max-w-7xl mx-auto w-full bg-background md:bg-transparent">
           <p className="font-mono text-label-sm text-primary tracking-[0.3em] uppercase mb-3">
             My Cine Toolbox
           </p>
-          <h1 className="font-display text-[64px] md:text-[96px] text-on-surface uppercase leading-none">
+          <h1 className="font-display text-[48px] sm:text-[64px] md:text-[96px] text-on-surface uppercase leading-none">
             Let's <span className="text-primary">Work</span>
           </h1>
           <p className="font-mono text-label-md text-on-surface-variant uppercase tracking-widest mt-2">
