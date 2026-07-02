@@ -17,7 +17,7 @@ export default function AboutPage() {
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="/contact-hero.png"
+            src="/contact-hero.png?v=2"
             alt="Aaron Stowers on set"
             className="w-full h-full object-cover object-center opacity-40"
           />

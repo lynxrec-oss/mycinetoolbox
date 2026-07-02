@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       <section className="relative h-[45vh] min-h-[320px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="/contact-hero.png"
+            src="/contact-hero.png?v=2"
             alt="Cinematic background"
             className="w-full h-full object-cover object-center opacity-40"
           />
