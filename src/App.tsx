@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   ShoppingBag, 
   Play, 
@@ -817,6 +817,15 @@ function HomePage() {
 }
 
 export default function App() {
+  const location = useLocation();
+
+  // Tembo Smart Pixel PageView Tracking for Single Page App Route Changes
+  useEffect(() => {
+    if (typeof (window as any).tembo === 'function') {
+      (window as any).tembo('track', 'PageView');
+    }
+  }, [location]);
+
   // Grammarly Opt-Out & Privacy Protection observer
   useEffect(() => {
     const disableGrammarlyForElement = (el: HTMLElement) => {
