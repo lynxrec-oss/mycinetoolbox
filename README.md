@@ -1,20 +1,41 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🎬 My Cine Toolbox
 
-# Run and deploy your AI Studio app
+A high-performance cinematography portfolio, creator store, and workflow toolkit built by Aaron D. Stowers.
 
-This contains everything you need to run your app locally.
+## Overview
+My Cine Toolbox showcases cinematic film projects, lens tests (including the NiSi Athena Cine lenses), color grading LUT packages, and custom creator intelligence tools designed for professional filmmakers and YouTube creators.
 
-View your app in AI Studio: https://ai.studio/apps/befd7a23-cb3e-4bc8-9cb4-ecca811c384c
+## Key Features
+- **Cinematography Showcase & Lens Tests:** High-resolution interactive visual showcases, interactive sample frame inspections, and real-world anamorphic / spherical lens breakdowns.
+- **Creator Store & Digital Assets:** Direct digital distribution for specialized LUT packs (e.g., Detroit Night LUT Pack), rigging recipes, and lighting setups.
+- **YouTube Creator Intelligence:** YouTube video optimizer, Opportunity Engine keyword intelligence, indexing verification portal, and audience analytics.
+- **Smart Pixel Integration:** Embedded Tembo Smart Pixel for route-aware visitor analytics and funnel tracking.
 
-## Run Locally
+## Tech Stack
+- **Frontend:** React 19, React Router 7, TypeScript, Vite, Tailwind CSS, Lucide React, Motion
+- **Hosting:** Firebase Hosting (site: `mycinetoolbox`, project: `tembo-page-prod-25`)
 
-**Prerequisites:**  Node.js
+## Getting Started
 
+### Installation
+```bash
+npm install
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Local Development
+```bash
+npm run dev
+```
+
+### Production Build
+```bash
+npm run build
+```
+
+## Deployment
+Firebase hosting configuration targets the `mycinetoolbox` site:
+```bash
+# Preview build locally
+npm run preview
+```
+*(Deployments are handled via Firebase Hosting for the `mycinetoolbox` target)*

@@ -33,6 +33,270 @@ import { publishFacebookPost, publishInstagramPost } from './metaApi';
 const ALLOWED_EMAIL = 'lynxrec@gmail.com';
 const ASSOCIATE_TAG = import.meta.env.VITE_AMAZON_ASSOCIATE_TAG || 'Khoc-20';
 
+interface SeoAudit {
+  id: string;
+  label: string;
+  status: 'success' | 'warning' | 'error';
+  message: string;
+}
+
+interface SeoReport {
+  score: number;
+  wordCount: number;
+  keywordDensity: number;
+  keywordCount: number;
+  audits: SeoAudit[];
+}
+
+const getSeoReport = (text: string, focusKeyword: string): SeoReport => {
+  const audits: SeoAudit[] = [];
+  let score = 0;
+
+  const normalizedText = text.toLowerCase();
+  const kw = focusKeyword.trim().toLowerCase();
+  
+  // Word count calculation
+  const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+  const wordCount = words.length;
+
+  // Keyword count
+  let keywordCount = 0;
+  if (kw.length > 0 && wordCount > 0) {
+    const escapedKw = kw.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const regex = new RegExp(`\\b${escapedKw}\\b`, 'gi');
+    const matches = text.match(regex);
+    keywordCount = matches ? matches.length : 0;
+  }
+  const keywordDensity = wordCount > 0 ? (keywordCount / wordCount) * 100 : 0;
+
+  // 1. Title check
+  const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  const firstLine = lines[0] || '';
+  const isKeywordInTitle = kw.length > 0 && firstLine.toLowerCase().includes(kw);
+  if (kw.length === 0) {
+    audits.push({
+      id: 'title',
+      label: 'Keyword in Title',
+      status: 'error',
+      message: 'No focus keyword provided. Specify a focus keyword in the left panel.'
+    });
+  } else if (isKeywordInTitle) {
+    score += 20;
+    audits.push({
+      id: 'title',
+      label: 'Keyword in Title',
+      status: 'success',
+      message: `Focus keyword "${focusKeyword}" found in your article title/first line.`
+    });
+  } else {
+    audits.push({
+      id: 'title',
+      label: 'Keyword in Title',
+      status: 'warning',
+      message: `Focus keyword "${focusKeyword}" was not found in your article title/first line.`
+    });
+  }
+
+  // 2. Intro check
+  const introText = normalizedText.substring(0, 300);
+  const isKeywordInIntro = kw.length > 0 && introText.includes(kw);
+  if (kw.length === 0) {
+    audits.push({
+      id: 'intro',
+      label: 'Keyword in Introduction',
+      status: 'error',
+      message: 'Add a focus keyword to evaluate introduction presence.'
+    });
+  } else if (isKeywordInIntro) {
+    score += 15;
+    audits.push({
+      id: 'intro',
+      label: 'Keyword in Introduction',
+      status: 'success',
+      message: 'Focus keyword appears in the first paragraph/introduction of the text.'
+    });
+  } else {
+    audits.push({
+      id: 'intro',
+      label: 'Keyword in Introduction',
+      status: 'warning',
+      message: 'Focus keyword was not found in the first paragraph. Try adding it early.'
+    });
+  }
+
+  // 3. Keyword Density check
+  if (kw.length === 0) {
+    audits.push({
+      id: 'density',
+      label: 'Keyword Density',
+      status: 'error',
+      message: 'Add a focus keyword to evaluate density.'
+    });
+  } else if (keywordDensity >= 0.5 && keywordDensity <= 2.5) {
+    score += 15;
+    audits.push({
+      id: 'density',
+      label: 'Keyword Density',
+      status: 'success',
+      message: `Perfect! Keyword density is ${keywordDensity.toFixed(2)}% (${keywordCount} matches). Target is 0.5% - 2.5%.`
+    });
+  } else if (keywordDensity > 0 && keywordDensity < 0.5) {
+    score += 8;
+    audits.push({
+      id: 'density',
+      label: 'Keyword Density',
+      status: 'warning',
+      message: `Low density: ${keywordDensity.toFixed(2)}% (${keywordCount} matches). Try incorporating your keyword a few more times.`
+    });
+  } else if (keywordDensity > 2.5 && keywordDensity <= 4.0) {
+    score += 8;
+    audits.push({
+      id: 'density',
+      label: 'Keyword Density',
+      status: 'warning',
+      message: `Slightly high: ${keywordDensity.toFixed(2)}% (${keywordCount} matches). Avoid overusing keywords (keyword stuffing).`
+    });
+  } else if (keywordDensity > 4.0) {
+    audits.push({
+      id: 'density',
+      label: 'Keyword Density',
+      status: 'error',
+      message: `Warning: Extremely high density ${keywordDensity.toFixed(2)}% (${keywordCount} matches). Reduce keyword presence.`
+    });
+  } else {
+    audits.push({
+      id: 'density',
+      label: 'Keyword Density',
+      status: 'warning',
+      message: 'Focus keyword not found in the text.'
+    });
+  }
+
+  // 4. Word Count
+  if (wordCount >= 300) {
+    score += 20;
+    audits.push({
+      id: 'length',
+      label: 'Article Word Count',
+      status: 'success',
+      message: `Great length! Word count is ${wordCount} words (minimum target is 300 words).`
+    });
+  } else if (wordCount >= 150) {
+    score += 10;
+    audits.push({
+      id: 'length',
+      label: 'Article Word Count',
+      status: 'warning',
+      message: `Thin content: ${wordCount} words. Consider expanding the article to at least 300 words for better SEO rankings.`
+    });
+  } else {
+    audits.push({
+      id: 'length',
+      label: 'Article Word Count',
+      status: 'error',
+      message: `Very thin content: ${wordCount} words. Write at least 150-300 words of companion summary.`
+    });
+  }
+
+  // 5. Headings / Subheadings check
+  const headingMatches = text.match(/^(?:##|###|####)\s+.+$/gm) || [];
+  const htmlHeadingMatches = text.match(/<(?:h2|h3|h4)[^>]*>.*?<\/(?:h2|h3|h4)>/gi) || [];
+  const totalHeadings = headingMatches.length + htmlHeadingMatches.length;
+
+  if (totalHeadings >= 2) {
+    score += 15;
+    audits.push({
+      id: 'headings',
+      label: 'Subheading Structure',
+      status: 'success',
+      message: `Good structure: Found ${totalHeadings} subheadings (H2-H4) dividing your content.`
+    });
+  } else if (totalHeadings === 1) {
+    score += 7;
+    audits.push({
+      id: 'headings',
+      label: 'Subheading Structure',
+      status: 'warning',
+      message: 'Found only 1 subheading. Use at least 2 subheadings (H2, H3) to improve readability.'
+    });
+  } else {
+    audits.push({
+      id: 'headings',
+      label: 'Subheading Structure',
+      status: 'warning',
+      message: 'No subheadings found. Break your content into structured sections using ## or ###.'
+    });
+  }
+
+  // 6. Alt Text Checklist (Markdown images and HTML images)
+  const mdImageRegex = /!\[(.*?)\]\((.*?)\)/g;
+  const htmlImageRegex = /<img[^>]*alt=["']([^"']*)["'][^>]*>/gi;
+  
+  const mdImages: string[] = [];
+  let mdMatch;
+  while ((mdMatch = mdImageRegex.exec(text)) !== null) {
+    mdImages.push(mdMatch[1] || '');
+  }
+
+  const htmlImages: string[] = [];
+  let htmlMatch;
+  while ((htmlMatch = htmlImageRegex.exec(text)) !== null) {
+    htmlImages.push(htmlMatch[1] || '');
+  }
+
+  const allAltTexts = [...mdImages, ...htmlImages];
+  const imageCount = allAltTexts.length;
+
+  if (imageCount > 0) {
+    const hasEmptyAlt = allAltTexts.some(alt => alt.trim() === '');
+    const hasKeywordInAlt = kw.length > 0 && allAltTexts.some(alt => alt.toLowerCase().includes(kw));
+
+    if (!hasEmptyAlt) {
+      score += 10;
+      if (hasKeywordInAlt) {
+        score += 5;
+        audits.push({
+          id: 'images',
+          label: 'Image Alt Attributes',
+          status: 'success',
+          message: `Perfect! All ${imageCount} images have descriptive alt text, and at least one contains your focus keyword.`
+        });
+      } else {
+        audits.push({
+          id: 'images',
+          label: 'Image Alt Attributes',
+          status: 'warning',
+          message: `Found ${imageCount} images with alt text, but none include the focus keyword "${focusKeyword}".`
+        });
+      }
+    } else {
+      if (hasKeywordInAlt) {
+        score += 5;
+      }
+      audits.push({
+        id: 'images',
+        label: 'Image Alt Attributes',
+        status: 'warning',
+        message: 'Some images are missing alt text descriptions (empty alt attributes).'
+      });
+    }
+  } else {
+    audits.push({
+      id: 'images',
+      label: 'Image Alt Attributes',
+      status: 'warning',
+      message: 'No images detected in the markdown. Consider adding illustrative screenshots or media.'
+    });
+  }
+
+  return {
+    score,
+    wordCount,
+    keywordDensity,
+    keywordCount,
+    audits
+  };
+};
 
 export default function YoutubeOptimizerPage() {
   const navigate = useNavigate();
@@ -65,6 +329,7 @@ export default function YoutubeOptimizerPage() {
   const [productAsins, setProductAsins] = useState<Record<string, string>>({});
   const [affiliateProducts, setAffiliateProducts] = useState<any[]>([]);
   const [activeResultTab, setActiveResultTab] = useState<'youtube' | 'article' | 'monetization' | 'social'>('youtube');
+  const [editableArticle, setEditableArticle] = useState('');
 
   // Auth subscriber
   useEffect(() => {
@@ -239,6 +504,7 @@ export default function YoutubeOptimizerPage() {
   const handleSelectVideo = (video: YouTubeVideo | null) => {
     setSelectedVideo(video);
     setSeoResult(null);
+    setEditableArticle('');
     setProductAsins({});
     setAffiliateProducts([]);
     setOptimizerError('');
@@ -308,6 +574,7 @@ export default function YoutubeOptimizerPage() {
     setIsOptimizing(true);
     setOptimizerError('');
     setSeoResult(null);
+    setEditableArticle('');
     setProductAsins({});
     setAffiliateProducts([]);
     setThumbnailWasAnalyzed(!!(thumbnailBase64 && thumbnailMimeType));
@@ -329,6 +596,7 @@ export default function YoutubeOptimizerPage() {
           : undefined
       });
       setSeoResult(result);
+      setEditableArticle(result.companionArticle || '');
       setAffiliateProducts(result.affiliateProducts || []);
       setActiveResultTab('youtube');
     } catch (err: any) {
@@ -1292,22 +1560,134 @@ export default function YoutubeOptimizerPage() {
               )}
 
               {/* Tab View: Companion Article */}
-              {activeResultTab === 'article' && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-outline-variant/20 pb-2">
-                    <h4 className="font-mono text-[10px] uppercase text-primary tracking-wider">Companion Blog Article</h4>
-                    <button
-                      onClick={() => handleCopyText(seoResult.companionArticle, 'companionArticle')}
-                      className="text-on-surface-variant hover:text-primary flex items-center gap-1.5 font-mono text-[9px] uppercase cursor-pointer"
-                    >
-                      {copiedField === 'companionArticle' ? <Check size={10} className="text-primary" /> : <Copy size={10} />} Copy Markdown
-                    </button>
+              {activeResultTab === 'article' && (() => {
+                const report = getSeoReport(editableArticle, keyword);
+                const score = report.score;
+                const radius = 35;
+                const circumference = 2 * Math.PI * radius;
+                const strokeDashoffset = circumference - (score / 100) * circumference;
+
+                // Color mappings
+                let scoreColor = 'stroke-[#e05a4e] text-[#e05a4e]';
+                let scoreBg = 'bg-[#e05a4e]/10 border-[#e05a4e]/20';
+                if (score >= 80) {
+                  scoreColor = 'stroke-[#10b981] text-[#10b981]';
+                  scoreBg = 'bg-[#10b981]/10 border-[#10b981]/20';
+                } else if (score >= 50) {
+                  scoreColor = 'stroke-[#f2ca50] text-[#f2ca50]';
+                  scoreBg = 'bg-[#f2ca50]/10 border-[#f2ca50]/20';
+                }
+
+                return (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    {/* Left Column: Markdown Editor */}
+                    <div className="lg:col-span-7 space-y-4">
+                      <div className="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+                        <h4 className="font-mono text-[10px] uppercase text-primary tracking-wider">Companion Blog Article (Editable)</h4>
+                        <button
+                          onClick={() => handleCopyText(editableArticle, 'companionArticle')}
+                          className="text-on-surface-variant hover:text-primary flex items-center gap-1.5 font-mono text-[9px] uppercase cursor-pointer"
+                        >
+                          {copiedField === 'companionArticle' ? <Check size={10} className="text-primary" /> : <Copy size={10} />} Copy Markdown
+                        </button>
+                      </div>
+                      <textarea
+                        value={editableArticle}
+                        onChange={(e) => setEditableArticle(e.target.value)}
+                        className="w-full h-[550px] bg-[#090f10] border border-outline-variant/30 focus:border-primary p-4 font-mono text-[11px] leading-relaxed text-[#dee4e3] focus:outline-none resize-none rounded-sm transition-colors duration-200"
+                        placeholder="Edit your blog post markdown here..."
+                      />
+                    </div>
+
+                    {/* Right Column: Rank Blog SEO Sidebar */}
+                    <div className="lg:col-span-5 space-y-5 bg-surface-container/35 border border-outline-variant/20 p-5 rounded-sm flex flex-col justify-start">
+                      <div className="border-b border-outline-variant/20 pb-3 flex items-center justify-between">
+                        <h4 className="font-mono text-[10px] uppercase text-secondary tracking-wider">Rank Blog SEO</h4>
+                        <span className="font-mono text-[8px] bg-secondary/10 border border-secondary/20 text-secondary px-1.5 py-0.5 rounded font-semibold uppercase tracking-wider">Real-time</span>
+                      </div>
+
+                      {/* Radial Gauge & Metrics */}
+                      <div className="flex items-center gap-5 bg-surface-container/50 border border-outline-variant/10 p-4 rounded-sm">
+                        {/* Circle Score Gauge */}
+                        <div className="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
+                          <svg className="w-full h-full transform -rotate-90">
+                            {/* Background track */}
+                            <circle
+                              cx="40"
+                              cy="40"
+                              r={radius}
+                              className="stroke-outline-variant/10 fill-none"
+                              strokeWidth="6"
+                            />
+                            {/* Active segment */}
+                            <circle
+                              cx="40"
+                              cy="40"
+                              r={radius}
+                              className={`${scoreColor.split(' ')[0]} fill-none transition-all duration-300`}
+                              strokeWidth="6"
+                              strokeDasharray={circumference}
+                              strokeDashoffset={strokeDashoffset}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          {/* Inner Text */}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className={`font-display text-headline-sm leading-none ${scoreColor.split(' ')[1]}`}>{score}</span>
+                            <span className="text-[7px] font-mono text-on-surface-variant/60 tracking-wider">SCORE</span>
+                          </div>
+                        </div>
+
+                        {/* Text Metrics */}
+                        <div className="space-y-1.5 font-mono text-[10px] text-on-surface-variant/80 flex-grow">
+                          <div>
+                            <span className="text-on-surface-variant/50">Focus Keyword: </span>
+                            <span className="font-bold text-primary">{keyword || 'Not Specified'}</span>
+                          </div>
+                          <div>
+                            <span className="text-on-surface-variant/50">Word Count: </span>
+                            <span className="font-bold text-[#dee4e3]">{report.wordCount} words</span>
+                          </div>
+                          <div>
+                            <span className="text-on-surface-variant/50">Keyword Density: </span>
+                            <span className="font-bold text-[#dee4e3]">
+                              {report.keywordDensity.toFixed(2)}% ({report.keywordCount} matches)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Audit Checklists */}
+                      <div className="space-y-3 flex-grow overflow-y-auto max-h-[360px] pr-1">
+                        <h5 className="font-mono text-[9px] uppercase text-on-surface-variant/60 tracking-wider font-semibold border-b border-outline-variant/10 pb-1">Optimization Audits</h5>
+                        {report.audits.map((audit) => {
+                          let IconComp = Check;
+                          let iconClass = 'text-[#10b981] bg-[#10b981]/10 border-[#10b981]/20';
+                          if (audit.status === 'warning') {
+                            IconComp = AlertTriangle;
+                            iconClass = 'text-[#f2ca50] bg-[#f2ca50]/10 border-[#f2ca50]/20';
+                          } else if (audit.status === 'error') {
+                            IconComp = X;
+                            iconClass = 'text-[#e05a4e] bg-[#e05a4e]/10 border-[#e05a4e]/20';
+                          }
+
+                          return (
+                            <div key={audit.id} className="flex gap-3 bg-surface-container/20 border border-outline-variant/10 p-3 rounded-sm items-start">
+                              <div className={`w-5 h-5 flex-shrink-0 border rounded-sm flex items-center justify-center ${iconClass}`}>
+                                <IconComp size={10} />
+                              </div>
+                              <div className="space-y-0.5">
+                                <h6 className="font-mono text-[9px] uppercase font-bold text-[#dee4e3]">{audit.label}</h6>
+                                <p className="text-[10px] text-on-surface-variant/75 font-sans leading-normal">{audit.message}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-[#090f10] border border-outline-variant/30 p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap select-all max-h-[500px] overflow-y-auto">
-                    {seoResult.companionArticle}
-                  </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* Tab View: Affiliate & Merch */}
               {activeResultTab === 'monetization' && (

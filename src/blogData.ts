@@ -281,7 +281,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <blockquote>This changes the economics completely. A 1TB Samsung 990 Pro NVMe SSD costs around $80. In a SolidPod housing, that becomes 1TB of cinema-grade recording media for a fraction of the CFast price.</blockquote>
 
 <h2>Real-World Performance</h2>
-<p>On the BMPCC 4K, I tested BRAW at 3:1 (highest quality, largest file size) with a Samsung 970 EVO Plus 1TB in the SolidPod. No dropped frames across a continuous 45-minute recording session. The adapter maintains write speeds well within the sustained throughput required for RAW cinema.</p>
+<p>On the BMPCC 4K, I tested BRAW at 3:1 (highest quality, largest file size) with a <a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">Samsung 970 EVO Plus 1TB</a> in the SolidPod. No dropped frames across a continuous 45-minute recording session. The adapter maintains write speeds well within the sustained throughput required for RAW cinema.</p>
 <p>Transfer to my Mac via USB 3.1 enclosure is significantly faster than CFast readers — I'm seeing 400-500MB/s reads vs 100-150MB/s on budget CFast readers.</p>
 
 <h2>The Setup Process</h2>
@@ -293,8 +293,12 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>I carry two SolidPods per shoot as redundancy — the same discipline you'd apply to CFast cards. Both are labeled, formatted, and ready before the first shot rolls.</p>
 
 <h2>The One Caveat</h2>
-<p>Not all M.2 NVMe drives are compatible. The SolidPod website maintains a tested compatibility list. I stick to Samsung 970/980/990 series and WD SN850 series — both are tested and reliable. Generic or budget NVMe drives may have controller compatibility issues.</p>
+<p>Not all M.2 NVMe drives are compatible. The SolidPod website maintains a tested compatibility list. I stick to <a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">Samsung 970/980/990 series</a> and <a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">WD SN850 series</a> — both are tested and reliable. Generic or budget NVMe drives may have controller compatibility issues.</p>
 <p>Do your research before buying random drives. The $20 you save buying off-brand is not worth discovering incompatibility on a shoot day.</p>
+
+<div class="note-callout">
+  <strong>Ingest Tip:</strong> Keep two SolidPods in your kit for redundancy. Using an NVMe enclosure lets you transfer 1TB of 3:1 BRAW footage to your editing RAID in under 15 minutes, bypassing traditional card reader bottlenecks.
+</div>
 
 <h2>Final Verdict</h2>
 <p>If you're still buying CFast cards for your cinema workflow, stop. The SolidPod + quality NVMe SSD delivers equal or better performance at dramatically lower cost, with better longevity and a simpler ingest workflow. It's the storage upgrade that made me genuinely rethink my entire media management system.</p>
@@ -317,17 +321,17 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>The SmallRig cage system for the BMPCC 4K has been the industry standard choice for independent cinematographers since the camera launched. After two years of running this rig on short films, documentary work, and commercial shoots across Detroit, here's my real assessment.</p>
 
 <h2>The SmallRig Cage: What It Includes</h2>
-<p>The SmallRig Basic Kit for the BMPCC 4K (part #2203) includes the cage body and one top handle. This is the starting point, not the finished build. The cage itself is CNC-machined aluminum — well-finished, no sharp edges, thread quality is solid throughout.</p>
+<p>The <a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">SmallRig Basic Kit for the BMPCC 4K (part #2203)</a> includes the cage body and one top handle. This is the starting point, not the finished build. The cage itself is CNC-machined aluminum — well-finished, no sharp edges, thread quality is solid throughout.</p>
 <p>The side 15mm rod ports are positioned correctly for matte boxes and follow focus systems. The bottom plate mounts directly to standard 15mm rail systems. Top NATO rail accepts handles, monitors, and wireless follow focus receivers.</p>
 <blockquote>The cage transforms a $1,300 camera that feels like a consumer product into something that looks and handles like professional cinema equipment. That matters on set — both functionally and for client confidence.</blockquote>
 
 <h2>The Build I'm Running</h2>
 <p>After two years of iteration, here's what I'm running:</p>
 <ul>
-<li><strong>SmallRig Cage #2203</strong> — the foundation</li>
-<li><strong>SmallRig Top Handle #1984</strong> — for run-and-gun and handheld work</li>
+<li><strong><a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">SmallRig Cage #2203</a></strong> — the foundation</li>
+<li><strong><a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">SmallRig Top Handle #1984</a></strong> — for run-and-gun and handheld work</li>
 <li><strong>SmallRig 15mm rod system</strong> — 15cm rods, front rod clamp</li>
-<li><strong>Tilta Nucleus-Nano follow focus</strong> — wireless, lightweight, precise</li>
+<li><strong><a href="https://amzn.to/4v0bHby" target="_blank" rel="noopener noreferrer">Tilta Nucleus-Nano follow focus</a></strong> — wireless, lightweight, precise</li>
 <li><strong>SmallHD Focus 5" monitor</strong> — on a magic arm off the NATO rail</li>
 <li><strong>Dual V-lock plate</strong> — powers both the camera and monitor simultaneously</li>
 <li><strong>HDMI lock</strong> — SmallRig makes a specific HDMI cable clamp for the BMPCC 4K that's saved me from a ruined cable connector three times</li>
@@ -336,6 +340,10 @@ export const BLOG_POSTS: BlogPost[] = [
 <h2>Balance & Weight</h2>
 <p>A fully rigged BMPCC 4K with the above setup runs around 4.5 kg (10 lbs) including a medium-weight cinema lens. This is manageable for handheld but demands a proper grip technique — the camera is too front-heavy for casual one-hand operation.</p>
 <p>On a gimbal (I use a DJI Ronin-S), the rig balances well once you remove the top handle and fold the monitor arm. Gimbal setups with the BMPCC 4K require patience to balance but hold their calibration reliably across a shoot day.</p>
+
+<div class="note-callout">
+  <strong>Rigging Tip:</strong> Always install the HDMI cable clamp. The BMPCC 4K's full-size HDMI port is soldered directly to the motherboard, and a single accidental yank can cause a costly repair.
+</div>
 
 <h2>What I'd Do Differently Starting Over</h2>
 <p>The V-lock plate system is bulkier than I'd like. If I was starting the build fresh today, I'd look at the SmallRig L-bracket + NPF battery plate solution — smaller, lighter, and more modular. V-lock makes sense for the Pyxis 6K, but for the BMPCC 4K form factor, it adds unnecessary bulk.</p>

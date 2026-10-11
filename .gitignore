@@ -6,3 +6,11 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# macOS AppleDouble and metadata files
+._*
+.Spotlight-V100
+.Trashes
+
+# Firebase cache
+.firebase/
